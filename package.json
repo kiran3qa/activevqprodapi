@@ -1,0 +1,24 @@
+{
+  "name": "dust",
+  "version": "1.0.0",
+  "description": "djhfdjh",
+  "keywords": [
+    "asa"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "sa"
+  },
+  "license": "ISC",
+  "author": "a",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "sas"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mssql": "^11.0.1",
+    "package": "^1.0.1"
+  }
+}
