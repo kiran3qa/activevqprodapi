@@ -13,7 +13,7 @@ app.use(cors)
 
 app.use('/api/auth', auth)
 
-app.listen(PORT, IP, ()=>{
+app.listen(PORT, '0.0.0.0', ()=>{
 
     console.log("server started")
 })
