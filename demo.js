@@ -3,8 +3,8 @@ const cors = require('cors')
 
 const app = express()
 
-const port = process.env.PORT
-const IP = "0.0.0.0"
+const port = 3535
+const IP = '0.0.0.0'
 
 const auth = require('./auth')
 
