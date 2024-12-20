@@ -3,8 +3,8 @@ const cors = require('cors')
 
 const app = express()
 
-const port = process.env.PORT || 3000; // Default to port 3000 if PORT is undefined
-const IP = process.env.IP || '0.0.0.0';
+const port = process.env.PORT
+const IP = process.env.IP
 
 const auth = require('./auth')
 
