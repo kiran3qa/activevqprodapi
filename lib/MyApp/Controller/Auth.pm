@@ -1,5 +1,7 @@
 package MyApp::Controller::Auth;
 use Mojo::Base 'Mojolicious::Controller';
+use strict;
+use warnings;
 
 # In-memory item storage (for demo purposes)
 # my $items = {};
