@@ -1,6 +1,8 @@
 package MyApp;
 use Mojo::Base 'Mojolicious';
 use DBI;
+use strict;
+use warnings;
 
 sub startup {
     my $self = shift;
