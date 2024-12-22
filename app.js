@@ -3,7 +3,7 @@ const app = express()
 
 const PORT = 3000
 
-app.use(JSON.parse())
+app.use(express.json())
 
 app.get('/users', (req ,res) =>{
 
