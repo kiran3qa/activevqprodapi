@@ -1,39 +1,49 @@
 const express = require('express')
 const router = express.Router()
 
-const connection = require('../dbconfig')
+const connection = require('../dbconfig');
+const { pool } = require('mssql');
 
 const app = express();
 app.use(express.json())
 
 router.post('/addstudent', async (req, res) => {
 
-    if (req.session.vqUserAuthCookie) {
+    if (req.session.vqlogincookie) {
 
         try {
 
-            const { fname, lname, father, mother, email, phone, dob, gender, studimage, dmitimage, paddress, caddress, passcode, studclass, school, counsname, counsdate, counstime} = req.body
+            const { fname, lname, father, mother, email, phone, dob, gender, studimage, dmitimage, paddress, caddress, passcode, studclass, school, counsname, counsdate, counstime } = req.body
             const studentStatus = 1
 
-            //make student roll no
-            const studRollNumber = await GenerateRollNumber(dob, father, mother, fname)
-            const Query = "INSERT INTO appstudents VALUES('" + studRollNumber + "','" + fname + "', '" + lname + "','" + father + "', '" + mother + "', '" + email + "', '" + phone + "', '" + dob + "','" + gender + "', '" + studimage + "', '" + dmitimage + "','" + paddress + "','" + caddress + "', '" + passcode + "', '" + studclass + "', '" + school + "', '" + counsname + "','" + counsdate + "', '" + counstime + "', " + studentStatus + ")";
+            // check the student email exists
+            if (await IsEmailExists(email) > 0) {
 
-            await connection.then(pool => {
-                return pool.request().query(Query);
-            }).then(result => {
-                res.json({ success: true, response: fname })
-            })
+                res.status(409).json({"message": "email exists" })
+            }
+
+            else {
+
+                //make student roll no
+                const studRollNumber = await GenerateRollNumber(dob, father, mother, fname)
+                const Query = "INSERT INTO appstudents VALUES('" + studRollNumber + "','" + fname + "', '" + lname + "','" + father + "', '" + mother + "', '" + email + "', '" + phone + "', '" + dob + "','" + gender + "', '" + studimage + "', '" + dmitimage + "','" + paddress + "','" + caddress + "', '" + passcode + "', '" + studclass + "', '" + school + "', '" + counsname + "','" + counsdate + "', '" + counstime + "', " + studentStatus + ")";
+
+                await connection.then(pool => {
+                    return pool.request().query(Query);
+                }).then(result => {
+                    res.status(200).json({"message" : fname + ' added'})
+                })
+            }
         }
 
         catch (error) {
-            res.json({ success: false, response: error.message })
+            res.status(500).json({ "message" : error.message })
         }
     }
 
     else {
 
-        res.json({ success: false, response: "Session Out" })
+        res.status(440).json({"response" : "session timeout" })
     }
 })
 
@@ -51,6 +61,12 @@ async function ConvertDatetoString(given_Date) {
 
     return year + month + day
 
+}
+
+async function IsEmailExists(student_email) {
+
+    const Query = "SELECT 1 FROM appstudents WHERE studemail= '" + student_email + "'";
+    return (await (await connection).query(Query)).recordset.length;
 }
 
 module.exports = router
